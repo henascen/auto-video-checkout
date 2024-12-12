@@ -26,10 +26,13 @@ c_handler = logging.StreamHandler()
 formatter = logging.Formatter(
     '%(asctime)s - %(name)s - %(levelname)s - %(message)s'
 )
-# add formatter to ch
+# add formatter to logger handler
 c_handler.setFormatter(formatter)
+# add export file to logger handler
+file_out_handler = logging.FileHandler('logs.log')
 # Add handler to logger
 logger.addHandler(c_handler)
+logger.addHandler(file_out_handler)
 
 
 @click.command()
@@ -123,6 +126,10 @@ def main(
         video_source = main_source.source
         cap = video_source.get_ocv_video_capture()
 
+        cap_writer = video_source.create_ocv_video_output(
+            ocv_video_capture=cap
+        )
+
         frame_count = 0
 
         while cap.isOpened():
@@ -195,8 +202,8 @@ def main(
                 DetectionLabel.PRODUCTS,
                 None
             )
-            if products_it_objs:
-                logger.info(f'Products in the frame: {len(products_it_objs)}')
+            # if products_it_objs:
+            #     logger.info(f'Products in the frame: {len(products_it_objs)}')
 
             image_products = main_utils.draw_interaction_bboxes_in_frame(
                 interaction_objs=products_it_objs,
@@ -213,8 +220,8 @@ def main(
             )
 
             # Inspect the current and previous products
-            logger.info(f'Current Products: {products.current_products}')
-            logger.info(f'Previous Products: {products.prev_frame_products}')
+            # logger.info(f'Current Products: {products.current_products}')
+            # logger.info(f'Previous Products: {products.prev_frame_products}')
 
             # Draw the products top location in the table top image
             products_top_table_img = (
@@ -240,7 +247,7 @@ def main(
 
             # Get active costumers from the management of assignments
             active_costumers = purchase_costumers.get_active_costumers()
-            logger.info(f'Active costumers list: {active_costumers}')
+            # logger.info(f'Active costumers list: {active_costumers}')
 
             if active_costumers:
                 # If there are active costumers, start assigning products
@@ -251,12 +258,12 @@ def main(
                         products_location_top=products_top_location_narray
                     )
                 )
-                logger.info(
-                    f'Hands Products Distances: {hands_products_distances}'
-                )
-                logger.info(
-                    f'Costumer Products Close: {costumer_products_close}'
-                )
+                # logger.info(
+                #     f'Hands Products Distances: {hands_products_distances}'
+                # )
+                # logger.info(
+                #     f'Costumer Products Close: {costumer_products_close}'
+                # )
 
                 # Get the difference between previous and current products
                 # In quantity, and sets with names and ids
@@ -282,6 +289,8 @@ def main(
 
                 # Return a compilation of all the transactions in this frame
 
+            cap_writer.write(image_products)
+
             exit_key = ImageUtils.show_image_waitkey(
                 window_name='Detection and Hands',
                 image_array=image_products,
@@ -291,7 +300,8 @@ def main(
             frame_count += 1
             if exit_key:
                 break
-
+        
+        cap_writer.release()
         ImageUtils.destroy_ocv_all_windows()
     
     elif isinstance(main_source.source, ImageSource):
