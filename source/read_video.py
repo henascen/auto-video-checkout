@@ -33,3 +33,23 @@ class VideoSource:
         else:
             video_source = str(self.source_path)
         return cv2.VideoCapture(video_source)
+
+    def create_ocv_video_output(
+            self,
+            ocv_video_capture: cv2.VideoCapture,
+            output_prefix='output',
+            output_fps=25,
+            output_format='avi',
+        ):
+        frame_width = int(ocv_video_capture.get(3))
+        frame_height = int(ocv_video_capture.get(4))
+
+        out_video_writer = cv2.VideoWriter(
+            f'{output_prefix}.{output_format}',
+            cv2.VideoWriter_fourcc('M','J','P','G'),
+            output_fps,
+            (frame_width,frame_height)
+        )
+
+        return out_video_writer
+        
