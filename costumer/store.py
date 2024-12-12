@@ -51,10 +51,10 @@ class Store:
                 table_prsp_matrix=self.products.table_prsp_matrix
             )
         )
-        logger.info(
-            'Array with active hands location from '
-            f'top {active_hands_location_top.shape}'
-        )
+        # logger.info(
+        #     'Array with active hands location from '
+        #     f'top {active_hands_location_top.shape}'
+        # )
 
         positive_active_hands_location_top_ids = (
             self.filter_positive_hands_location(
@@ -69,10 +69,10 @@ class Store:
             positive_active_hands_location_top_ids[1]
         )
 
-        logger.info(
-            'Array with POSITIVE active hands location from '
-            f'top {positive_active_hands_location_top.shape}'
-        )
+        # logger.info(
+        #     'Array with POSITIVE active hands location from '
+        #     f'top {positive_active_hands_location_top.shape}'
+        # )
 
         return (
             positive_active_hands_location_top,
