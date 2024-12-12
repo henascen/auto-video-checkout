@@ -1,0 +1,23 @@
+[tool.poetry]
+name = "product-assign"
+version = "0.1.1"
+description = "A package to develop a solution to recognize getting items from a store using Computer Vision"
+authors = ["Henry Ascencio"]
+readme = "README.md"
+packages = [{include = "product_assignment"}]
+
+[tool.poetry.dependencies]
+python = ">=3.9, <3.10"
+norfair = "2.2.0"
+click = "8.1.3"
+proto-plus = "1.22.2"
+onnxruntime = "1.14.1"
+flake8 = "6.0.0"
+scipy = "1.10.1"
+scikit-learn = "1.2.2"
+opencv-contrib-python = "4.7.0.72"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"

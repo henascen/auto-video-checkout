@@ -1,0 +1,1 @@
+You can use any ONNX model that detects people, hands and products in your table.

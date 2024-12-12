@@ -1,0 +1,6 @@
+data/two_person_hands.jpg
+data/videos/*
+models/*.onnx
+*/__pycache__
+__pycache__/
+*.zip
